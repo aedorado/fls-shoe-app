@@ -1,19 +1,17 @@
 import os
+from API import API
 # We'll render HTML templates and access data sent by POST
 # using the request object from flask. Redirect and url_for
 # will be used to redirect the user once the upload is done
 # and send_from_directory will help us to send/show on the
 # browser the file that the user just uploaded
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, jsonify
 from werkzeug import secure_filename
 
-# Initialize the Flask application
-app = Flask(__name__)
+app = Flask(__name__)	# Initialize the Flask application
 
-# This is the path to the upload directory
-app.config['UPLOAD_FOLDER'] = 'uploads/'
-# These are the extension that we are accepting to be uploaded
-app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])
+app.config['UPLOAD_FOLDER'] = 'uploads/'	# This is the path to the upload directory
+app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])	# These are the extension that we are accepting to be uploaded
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
@@ -27,6 +25,9 @@ def allowed_file(filename):
 def index():
     return render_template('index.html')
 
+@app.route('/images/<filename>')
+def std_images(filename):
+    return send_from_directory('images/', filename)
 
 # Route that will process the file upload
 @app.route('/upload', methods=['POST'])
@@ -39,11 +40,12 @@ def upload():
         filename = secure_filename(file.filename)
         # Move the file form the temporal folder to
         # the upload folder we setup
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        # Redirect the user to the uploaded_file route, which
-        # will basicaly show on the browser the uploaded file
-        return redirect(url_for('uploaded_file',
-                                filename=filename))
+        image_url = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(image_url)	# save the file
+        image_url = 'https://fls-shoe-app.herokuapp.com/' + image_url
+        json_output =  API().get_json(image_url)
+        print json_output
+        return jsonify(json_output)
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
