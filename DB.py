@@ -1,6 +1,5 @@
 import sqlite3 as db
 import glob, json
-from API import API
 
 class DB:
 
@@ -30,6 +29,12 @@ class DB:
         query = 'INSERT INTO data (image_url, image_json) VALUES (?, ?)'
         self.cursor.execute(query, (url, str(json_obj)))
         self.conn.commit()
+
+    def get_all(self):
+        query = "SELECT * FROM data"
+        self.cursor.execute(query)
+        res = self.cursor.fetchall()
+        return res
 
     def print_all_data(self):
         query = "SELECT * FROM data"

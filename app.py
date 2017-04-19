@@ -26,7 +26,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('test.html')
 
 @app.route('/test/<filename>')
 def tst_images(filename):
@@ -45,12 +45,10 @@ def test():
         image_url = os.path.join(app.config['TEST_FOLDER'], filename)
         file.save(image_url)    # save the file
         image_url = 'https://fls-shoe-app.herokuapp.com/' + image_url
-        # print image_url
-        json_result =  API().get_json(image_url)
+        print image_url
+        json_result =  API().compare(image_url)
         # print json_result
-        # DB().add_data_table(image_url, json_result)
-        # return jsonify(json_result)
-        return json_result
+        return jsonify(json_result)
 
 @app.route('/viewdb')
 def viewdb():
