@@ -44,10 +44,12 @@ def upload():
         image_url = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(image_url)	# save the file
         image_url = 'https://fls-shoe-app.herokuapp.com/' + image_url
+        # print image_url
         json_result =  API().get_json(image_url)
         # print json_result
         DB().add_data_table(image_url, json_result)
-        return jsonify(json_result)
+        # return jsonify(json_result)
+        return DB().print_all_data()
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
