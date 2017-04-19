@@ -1,5 +1,6 @@
 import os
 from API import API
+from DB import DB
 # We'll render HTML templates and access data sent by POST
 # using the request object from flask. Redirect and url_for
 # will be used to redirect the user once the upload is done
@@ -43,9 +44,10 @@ def upload():
         image_url = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(image_url)	# save the file
         image_url = 'https://fls-shoe-app.herokuapp.com/' + image_url
-        json_output =  API().get_json(image_url)
-        print json_output
-        return jsonify(json_output)
+        json_result =  API().get_json(image_url)
+        # print json_result
+        DB().add_data_table(image_url, json_result)
+        return jsonify(json_result)
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
