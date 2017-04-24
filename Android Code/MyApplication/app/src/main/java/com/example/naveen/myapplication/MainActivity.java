@@ -6,6 +6,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,6 +28,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -124,7 +126,7 @@ public class MainActivity extends Activity {
 
 
     //get captures picture real path, if not exist then save the picture according to timestamp
-    private static File getOutputMediaFile(int type){
+    public static File getOutputMediaFile(int type){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "MyCameraApp");
         if (! mediaStorageDir.exists()){
@@ -154,47 +156,46 @@ public class MainActivity extends Activity {
 
     //method for picking images from gallery
     public void pickGallery(View view) {
-        if (Build.VERSION.SDK_INT <19){
-            Intent intent = new Intent();
-            intent.setType("image/jpeg");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Picture "),1);
-        } else {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/jpeg");
-            startActivityForResult(intent, 2);
-        }
+        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 2);
     }
 
 
     //path returned from previous method after selecting images from gallery
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Log.d("hello", " requestcode :" + String.valueOf(requestCode));
-    Log.d("hello", " requestcode :" + String.valueOf(resultCode));
-        if(requestCode == 1){
-            if(resultCode == -1){
-                Uri result = data.getData();
-                Log.d("hello", "get data hahaha");
-                Log.d("hello", result.toString());
-                String realPath = getRealPathFromURI(this, result);
-                Log.d("hello", realPath + " hahaha ");
-                Intent i = new Intent(MainActivity.this, Results.class);
-                i.putExtra("filePath",realPath);
-                Log.d("hello", realPath);
-                if(isNetworkAvailable()) {
-                    startActivity(i);
-                }else{
-                    Toast.makeText(this, "Internet is not available...", Toast.LENGTH_SHORT).show();
-                }
+        if(requestCode == 2) {
+            Uri imageUri = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(byteArray);
+                fos.close();
+                Toast.makeText(this, "Image saved to some location", Toast.LENGTH_SHORT).show();
+            } catch (FileNotFoundException e) {
+                Log.d(TAG, "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d(TAG, "Error accessing file: " + e.getMessage());
+            }
+            Intent i = new Intent(MainActivity.this, Results.class);
+            i.putExtra("filePath",pictureFile.getPath());
+            Log.d("hello", pictureFile.getPath());
+            if(isNetworkAvailable()) {
+                startActivity(i);
+            }else{
+                Toast.makeText(MainActivity.this, "Internet is not available...", Toast.LENGTH_SHORT).show();
             }
         }
-
-        if(requestCode == 2){
-            Uri result = data.getData();
-            Log.d("hello", result.toString());
-        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
