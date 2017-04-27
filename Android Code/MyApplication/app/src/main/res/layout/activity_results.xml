@@ -11,7 +11,7 @@
         android:clipToPadding="false"
         android:background="#5e6a7c"
         android:orientation="vertical"
-        tools:context="com.example.naveen.myapplication.Results">
+        tools:context="com.example.shaleya.myapplication.com.example.shaleya.myapplication.Results">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_margin="10dp"

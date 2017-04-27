@@ -1,8 +1,7 @@
-package com.example.naveen.myapplication;
+package com.example.shaleya.myapplication;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,13 +10,8 @@ import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresPermission;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -40,7 +34,6 @@ import at.markushi.ui.CircleButton;
 
 import static android.content.ContentValues.TAG;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 
 //activity where camerapreview is shown to capture pictures

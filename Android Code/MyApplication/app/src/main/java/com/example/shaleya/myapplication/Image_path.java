@@ -1,4 +1,4 @@
-package com.example.naveen.myapplication;
+package com.example.shaleya.myapplication;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
-import static com.example.naveen.myapplication.MainActivity.getOutputMediaFile;
 
 public class Image_path extends AppCompatActivity {
     public Uri imageUri;
@@ -43,7 +42,7 @@ public class Image_path extends AppCompatActivity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-            pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            pictureFile = MainActivity.getOutputMediaFile(MEDIA_TYPE_IMAGE);
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(byteArray);

@@ -1,4 +1,4 @@
-package com.example.naveen.myapplication;
+package com.example.shaleya.myapplication;
 
 import org.junit.Test;
 

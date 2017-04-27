@@ -1,4 +1,4 @@
-package com.example.naveen.myapplication;
+package com.example.shaleya.myapplication;
 
 /**
  * Created by naveen on 22/4/17.

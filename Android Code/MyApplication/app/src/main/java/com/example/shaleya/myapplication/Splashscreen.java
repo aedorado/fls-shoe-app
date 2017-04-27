@@ -1,9 +1,10 @@
-package com.example.naveen.myapplication;
+package com.example.shaleya.myapplication;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 //splash screen which redicrects to the mainacitivty after three seconds
 public class Splashscreen extends AppCompatActivity {
 

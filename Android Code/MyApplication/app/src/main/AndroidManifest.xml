@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.naveen.myapplication">
+    package="com.example.shaleya.myapplication">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -18,23 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Results" />
+        <activity android:name="com.example.shaleya.myapplication.Results" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.shaleya.myapplication.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Splashscreen">
+        <activity android:name="com.example.shaleya.myapplication.Splashscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Image_path">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name="com.example.shaleya.myapplication.Image_path">
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.naveen.myapplication;
+package com.example.shaleya.myapplication;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
