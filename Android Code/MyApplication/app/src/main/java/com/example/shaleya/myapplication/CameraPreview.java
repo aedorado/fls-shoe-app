@@ -10,10 +10,6 @@ import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by naveen on 12/4/17.
- */
-
 
 //This is class for previewing camera in framelayout, camera is always horizontal
 

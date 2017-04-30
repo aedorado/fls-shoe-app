@@ -20,7 +20,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.shaleya.myapplication.DataBaseHelper.LoginDataBaseAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,7 +45,7 @@ public class MainActivity extends Activity {
     public Camera mCamera;
     private CameraPreview mPreview;
     public File pictureFile;
-
+    public String user;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
@@ -72,23 +75,30 @@ public class MainActivity extends Activity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    //This method will setup the first screen of the main class
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("hello", " came into main activity ");
         Display display = getWindowManager().getDefaultDisplay();
+        Intent intent = getIntent();
+        user = intent.getStringExtra("USER");
+        Log.d("hello", "user is :" + user);
+        TextView username = (TextView)findViewById(R.id.username);
+        username.setText("Hello " + user + "!" );
         mCamera = getCameraInstance();
         mCamera.setDisplayOrientation(90);
-        mPreview = new CameraPreview(this, mCamera);
+        mPreview = new CameraPreview(this, mCamera);//Camera preview is being requested here
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
-        CircleButton captureButton = (CircleButton) findViewById(R.id.circleButton);
+        CircleButton captureButton = (CircleButton) findViewById(R.id.circleButton); // this is the circular button at the bottom of the screen used to click picture from camera
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mCamera.takePicture(null, null, mPicture);
-                        CustomDialogClass cdd=new CustomDialogClass(MainActivity.this);
+                        CustomDialogClass cdd=new CustomDialogClass(MainActivity.this); //When user clicks the picture, show the dialog, refer CustomDialogClass in this file itself
                         cdd.show();
                     }
                 }
@@ -100,7 +110,7 @@ public class MainActivity extends Activity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
-            pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE); //Function to get the media output from the camera, defined below
             if (pictureFile == null){
                 return;
             }
@@ -108,7 +118,7 @@ public class MainActivity extends Activity {
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
-                fos.close();
+                fos.close(); // Saving the media file in a stream to use it further
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -153,6 +163,15 @@ public class MainActivity extends Activity {
         startActivityForResult(intent, 2);
     }
 
+    public void logout(View view) {
+        LoginDataBaseAdapter loginDataBaseAdapter = new LoginDataBaseAdapter(MainActivity.this);
+        loginDataBaseAdapter = loginDataBaseAdapter.open();
+        loginDataBaseAdapter.updateEntry("currentuser", "-1");
+        Log.d("hello", "entry updated");
+        Intent i = new Intent(MainActivity.this, Login.class);
+        startActivity(i);
+    }
+
 
     //path returned from previous method after selecting images from gallery
     @Override
@@ -181,9 +200,10 @@ public class MainActivity extends Activity {
             }
             Intent i = new Intent(MainActivity.this, Results.class);
             i.putExtra("filePath",pictureFile.getPath());
+            i.putExtra("USER", user);
             Log.d("hello", pictureFile.getPath());
             if(isNetworkAvailable()) {
-                startActivity(i);
+                startActivityForResult(i,1);
             }else{
                 Toast.makeText(MainActivity.this, "Internet is not available...", Toast.LENGTH_SHORT).show();
             }
@@ -206,14 +226,17 @@ public class MainActivity extends Activity {
             this.c = a;
         }
 
+
+        // All the setup of the screen always start from Oncreate.
+        //Since this is a private class to display the custom dialog, this method would set up that part of the screen
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            requestWindowFeature(Window.FEATURE_NO_TITLE); //Theme requested for the screen
             setContentView(R.layout.custom_diaog);
-            yes = (Button) findViewById(R.id.btn_yes);
+            yes = (Button) findViewById(R.id.btn_yes); // These buttons are defined in the corresponding XML res/layout/custom_dialog
             no = (Button) findViewById(R.id.btn_no);
-            yes.setOnClickListener(this);
+            yes.setOnClickListener(this); // Setting up On click listeners
             no.setOnClickListener(this);
 
         }
@@ -225,8 +248,8 @@ public class MainActivity extends Activity {
             switch (v.getId()) {
                 case R.id.btn_yes:
                     Intent i = new Intent(MainActivity.this, Results.class);
-                    i.putExtra("filePath",pictureFile.getPath());
-                    Log.d("hello", pictureFile.getPath());
+                    i.putExtra("filePath",pictureFile.getPath()); // Putting the file path in the intent as extra data, this will be used where the intent is targeted i.e. result.class
+                    Log.d("filePath", pictureFile.getPath());
                     if(isNetworkAvailable()) {
                         startActivity(i);
                     }else{
@@ -234,7 +257,7 @@ public class MainActivity extends Activity {
                     }
                     break;
                 case R.id.btn_no:
-                    mCamera.startPreview();
+                    mCamera.startPreview(); // If the user clicks No, dismiss the dialog and start camera again.
                     dismiss();
                     break;
                 default:

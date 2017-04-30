@@ -18,19 +18,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.shaleya.myapplication.Results" />
+        <activity android:name=".Results" />
         <activity
-            android:name="com.example.shaleya.myapplication.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.example.shaleya.myapplication.Splashscreen">
+        <activity android:name=".Splashscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.shaleya.myapplication.Image_path">
+        <activity android:name=".Image_path" />
+        <activity android:name=".Login">
         </activity>
+        <activity android:name=".Register"></activity>
     </application>
 
 </manifest>

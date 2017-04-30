@@ -22,7 +22,7 @@ android {
     buildToolsVersion "25.0.2"
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.example.naveen.myapplication"
+        applicationId "com.example.shaleya.myapplication"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
@@ -48,6 +48,8 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
 }
+
+
 
 
 
